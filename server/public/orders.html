@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Kiosk Back Office - Orders</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="styles/styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Food Kiosk Back Office</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="categories.html">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="orders.html">Orders</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <h2>Orders</h2>
+
+        <!-- Orders Table -->
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer Name</th>
+                                <th>Items</th>
+                                <th>Total Price</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#1234</td>
+                                <td>John Doe</td>
+                                <td>
+                                    <ul class="list-unstyled mb-0">
+                                        <li>Classic Burger x1</li>
+                                        <li>French Fries x1</li>
+                                        <li>Soft Drink x1</li>
+                                    </ul>
+                                </td>
+                                <td>$23.00</td>
+                                <td><span class="badge bg-success">Completed</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-info">View Details</button>
+                                    <button class="btn btn-sm btn-warning">Update Status</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1233</td>
+                                <td>Jane Smith</td>
+                                <td>
+                                    <ul class="list-unstyled mb-0">
+                                        <li>Classic Burger x2</li>
+                                        <li>French Fries x2</li>
+                                    </ul>
+                                </td>
+                                <td>$40.00</td>
+                                <td><span class="badge bg-warning">Processing</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-info">View Details</button>
+                                    <button class="btn btn-sm btn-warning">Update Status</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#1232</td>
+                                <td>Mike Johnson</td>
+                                <td>
+                                    <ul class="list-unstyled mb-0">
+                                        <li>Classic Burger x1</li>
+                                        <li>Soft Drink x2</li>
+                                    </ul>
+                                </td>
+                                <td>$21.00</td>
+                                <td><span class="badge bg-success">Completed</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-info">View Details</button>
+                                    <button class="btn btn-sm btn-warning">Update Status</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
