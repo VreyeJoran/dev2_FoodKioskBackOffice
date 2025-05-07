@@ -1,0 +1,37 @@
+{
+  "name": "dev2_foodkioskbackoffice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --ext ts --exec ts-node ./server/app.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VreyeJoran/dev2_FoodKioskBackOffice.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/VreyeJoran/dev2_FoodKioskBackOffice/issues"
+  },
+  "homepage": "https://github.com/VreyeJoran/dev2_FoodKioskBackOffice#readme",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-ejs-layouts": "^2.5.1",
+    "postgres": "^3.4.5"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.1",
+    "@types/express-ejs-layouts": "^2.5.4",
+    "nodemon": "^3.1.10",
+    "supabase": "^2.22.12",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
