@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -12,8 +12,46 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 
-<body>
-    <%- body %>
+<body class="layout">
+    <div class="layout__container">
+        <!-- Sidebar -->
+        <aside class="layout__sidebar">
+            <div class="sidebar">
+                <div class="sidebar__header">
+                    <h1 class="sidebar__title">Hawaiian PokeBowl Backoffice</h1>
+                </div>
+                <nav class="sidebar__nav">
+                    <ul class="sidebar__menu">
+                        <li class="sidebar__item">
+                            <a href="/" class="sidebar__link">Dashboard</a>
+                        </li>
+                        <li class="sidebar__item">
+                            <a href="/products" class="sidebar__link">Products</a>
+                        </li>
+                        <li class="sidebar__item">
+                            <a href="/categories" class="sidebar__link">Categories</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="layout__main">
+            <header class="layout__header">
+                <div class="header">
+                    <h2 class="header__title"><%= title %></h2>
+                    <div class="header__user">
+                        <span class="header__username">Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="layout__content">
+                <%- body %>
+            </div>
+        </main>
+    </div>
 </body>
 
 </html>

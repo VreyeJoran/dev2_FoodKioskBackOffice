@@ -1,0 +1,42 @@
+<div class="table-container">
+    <div class="table-container__header">
+        <h2 class="table-container__title">Products</h2>
+        <a href="/products/new" class="table-container__button">Add Product</a>
+    </div>
+
+    <div class="table-container__content">
+        <table class="table-container__table">
+            <thead class="table-container__thead">
+                <tr class="table-container__tr">
+                    <th class="table-container__th">Product ID</th>
+                    <th class="table-container__th">Product Name</th>
+                    <th class="table-container__th">Price</th>
+                    <th class="table-container__th">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="table-container__tbody">
+                <% if(products.length !==0) { %>
+                    <% products.forEach(product=> { %>
+                        <tr class="table-container__tr">
+                            <td class="table-container__td">
+                                <%= product.id %>
+                            </td>
+                            <td class="table-container__td">
+                                <%= product.name %>
+                            </td>
+                            <td class="table-container__td">€<%= product.price %>
+                            </td>
+                            <td class="table-container__td">
+                                <div class="table-container__actions">
+                                    <a href="/products/edit/1"
+                                        class="table-container__button table-container__button--edit">Edit</a>
+                                    <button
+                                        class="table-container__button table-container__button--delete">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <% })} %>
+            </tbody>
+        </table>
+    </div>
+</div>
