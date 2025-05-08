@@ -1,3 +1,6 @@
+/* Import add pages styles */
+@import 'add-pages.css';
+
 /* Layout */
 .layout {
     min-height: 100vh;

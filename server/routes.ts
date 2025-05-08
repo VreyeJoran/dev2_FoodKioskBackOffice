@@ -30,8 +30,8 @@ router.get("/products", async (req: Request, res: Response) => {
     });
 });
 
-router.get("/products/new", (req: Request, res: Response) => {
-    res.render("products/new", { 
+router.get("/add-products", async (req: Request, res: Response) => {
+    res.render("add-products", { 
         title: "Add New Product" 
     });
 });
