@@ -1,7 +1,7 @@
 <div class="table-container">
     <div class="table-container__header">
-        <h2 class="table-container__title">Categories</h2>
-        <a href="/categories/new" class="table-container__button">Add Category</a>
+        <h2 class="table-container__title">Ingredients</h2>
+        <a href="/ingredients/new" class="table-container__button">Add Ingredient</a>
     </div>
 
     <div class="table-container__content">
@@ -9,27 +9,27 @@
             <thead class="table-container__thead">
                 <tr class="table-container__tr">
                     <th class="table-container__th">ID</th>
-                    <th class="table-container__th">Category Name</th>
-                    <th class="table-container__th">Number of Products</th>
-                    <th class="table-container__th">Description</th>
+                    <th class="table-container__th">Ingredient Name</th>
+                    <th class="table-container__th">Ingredient Type</th>
+                    <th class="table-container__th">Price</th>
                     <th class="table-container__th">Actions</th>
                 </tr>
             </thead>
             <tbody class="table-container__tbody">
-                <% if(categories.length !==0) { %>
-                    <% categories.forEach(category=> { %>
+                <% if(ingredients.length !==0) { %>
+                    <% ingredients.forEach(ingredient=> { %>
                         <tr class="table-container__tr">
                             <td class="table-container__td">
-                                <%= category.id %>
+                                <%= ingredient.id %>
                             </td>
                             <td class="table-container__td">
-                                <%= category.name %>
+                                <%= ingredient.name %>
                             </td>
                             <td class="table-container__td">
-                                <%= category.number_of_products %>
+                                <%= ingredient.type %>
                             </td>
                             <td class="table-container__td">
-                                <%= category.description %>
+                                <%= ingredient.price %>
                             </td>
                             <td class="table-container__td">
                                 <div class="table-container__actions">

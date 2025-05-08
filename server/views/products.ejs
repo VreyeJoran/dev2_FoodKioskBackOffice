@@ -8,9 +8,11 @@
         <table class="table-container__table">
             <thead class="table-container__thead">
                 <tr class="table-container__tr">
-                    <th class="table-container__th">Product ID</th>
+                    <th class="table-container__th">ID</th>
                     <th class="table-container__th">Product Name</th>
+                    <th class="table-container__th">Category</th>
                     <th class="table-container__th">Price</th>
+                    <th class="table-container__th">Description</th>
                     <th class="table-container__th">Actions</th>
                 </tr>
             </thead>
@@ -24,7 +26,13 @@
                             <td class="table-container__td">
                                 <%= product.name %>
                             </td>
+                            <td class="table-container__td">
+                                <%= product.category %>
+                            </td>
                             <td class="table-container__td">€<%= product.price %>
+                            </td>
+                            <td class="table-container__td">
+                                <%= product.description %>
                             </td>
                             <td class="table-container__td">
                                 <div class="table-container__actions">

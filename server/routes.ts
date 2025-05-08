@@ -1,6 +1,8 @@
 import express, { Request, Response } from "express";
 import path from "path";
 import { Product, getAllProducts } from "./services/productsService";
+import { Category, getAllCategories } from "./services/categoriesService";
+import { Ingredient, getAllIngredients } from "./services/ingredientsService";
 
 const router = express.Router();
 
@@ -46,11 +48,7 @@ router.get("/products/edit/:id", async (req: Request, res: Response) => {
 // Categories routes
 router.get("/categories", async (req: Request, res: Response) => {
     // TODO: Add categories fetching
-    const categories = [
-        { id: 1, name: "Burgers", productCount: 5 },
-        { id: 2, name: "Sides", productCount: 8 },
-        { id: 3, name: "Drinks", productCount: 6 }
-    ];
+    const categories: Category[] = await getAllCategories();
     
     res.render("categories", { 
         title: "Categories",
@@ -70,6 +68,32 @@ router.get("/categories/edit/:id", async (req: Request, res: Response) => {
     res.render("categories/edit", { 
         title: "Edit Category",
         categoryId 
+    });
+});
+
+// Ingredients routes
+router.get("/ingredients", async (req: Request, res: Response) => {
+    // TODO: Add ingredients fetching
+    const ingredients: Ingredient[] = await getAllIngredients();
+    
+    res.render("ingredients", { 
+        title: "Ingredients",
+        ingredients 
+    });
+});
+
+router.get("/ingredients/new", (req: Request, res: Response) => {
+    res.render("ingredients/new", { 
+        title: "Add New Ingredient" 
+    });
+});
+
+router.get("/ingredients/edit/:id", async (req: Request, res: Response) => {
+    const ingredientId = req.params.id;
+    // TODO: Add ingredient fetching by ID
+    res.render("ingredients/edit", { 
+        title: "Edit Ingredient",
+        ingredientId 
     });
 });
 
