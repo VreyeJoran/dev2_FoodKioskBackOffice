@@ -4,7 +4,7 @@
     </div>
 
     <div class="content__body">
-        <form action="/products/add" method="POST" class="form" enctype="multipart/form-data">
+        <form action="/add-product" method="POST" class="form" enctype="multpart/form-data">
             <div class="form__group">
                 <label for="name" class="form__label">Product Name</label>
                 <input type="text" id="name" name="name" class="form__input" required>
@@ -23,9 +23,11 @@
             <div class="form__group">
                 <label for="category" class="form__label">Category</label>
                 <select id="category" name="category" class="form__input" required>
-                    <% categories.forEach(function(category) { %>
-                        <option value="<%= category._id %>"><%= category.name %></option>
-                    <% }); %>
+                    <% categories.forEach(category=> { %>
+                        <option value="<%= category.id %>">
+                            <%= category.name %>
+                        </option>
+                        <% }); %>
                 </select>
             </div>
 
@@ -39,10 +41,13 @@
                 <div class="ingredients-list">
                     <% ingredients.forEach(function(ingredient) { %>
                         <div class="ingredient-item">
-                            <input type="checkbox" id="ingredient-<%= ingredient._id %>" name="ingredients[]" value="<%= ingredient._id %>">
-                            <label for="ingredient-<%= ingredient._id %>"><%= ingredient.name %></label>
+                            <input type="checkbox" id="ingredient-<%= ingredient._id %>" name="ingredients[]"
+                                value="<%= ingredient._id %>">
+                            <label for="ingredient-<%= ingredient._id %>">
+                                <%= ingredient.name %>
+                            </label>
                         </div>
-                    <% }); %>
+                        <% }); %>
                 </div>
             </div>
 
@@ -52,4 +57,4 @@
             </div>
         </form>
     </div>
-</div> 
+</div>

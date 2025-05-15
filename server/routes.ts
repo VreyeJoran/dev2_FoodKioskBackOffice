@@ -30,9 +30,16 @@ router.get("/products", async (req: Request, res: Response) => {
     });
 });
 
-router.get("/add-products", async (req: Request, res: Response) => {
-    res.render("add-products", { 
-        title: "Add New Product" 
+router.get("/add-product", async (req: Request, res: Response) => {
+    const products: Product[] = await getAllProducts();
+    const categories: Category[] = await getAllCategories();
+    const ingredients: Ingredient[] = await getAllIngredients();
+
+    res.render("add-product", { 
+        title: "Add New Product",
+        products,
+        categories,
+        ingredients
     });
 });
 
