@@ -4,7 +4,7 @@
     </div>
 
     <div class="content__body">
-        <form action="/add-product" method="POST" class="form" enctype="multpart/form-data">
+        <form action="/add-product" method="POST" class="form" enctype="multipart/form-data">
             <div class="form__group">
                 <label for="name" class="form__label">Product Name</label>
                 <input type="text" id="name" name="name" class="form__input" required>
@@ -22,7 +22,7 @@
 
             <div class="form__group">
                 <label for="category" class="form__label">Category</label>
-                <select id="category" name="category" class="form__input" required>
+                <select id="category" name="category_id" class="form__input" required>
                     <% categories.forEach(category=> { %>
                         <option value="<%= category.id %>">
                             <%= category.name %>
@@ -34,21 +34,6 @@
             <div class="form__group">
                 <label for="image" class="form__label">Product Image</label>
                 <input type="file" id="image" name="image" class="form__input" accept="image/*">
-            </div>
-
-            <div class="form__group">
-                <label class="form__label">Ingredients</label>
-                <div class="ingredients-list">
-                    <% ingredients.forEach(function(ingredient) { %>
-                        <div class="ingredient-item">
-                            <input type="checkbox" id="ingredient-<%= ingredient._id %>" name="ingredients[]"
-                                value="<%= ingredient._id %>">
-                            <label for="ingredient-<%= ingredient._id %>">
-                                <%= ingredient.name %>
-                            </label>
-                        </div>
-                        <% }); %>
-                </div>
             </div>
 
             <div class="form__actions">

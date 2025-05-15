@@ -1,10 +1,25 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, Router } from "express";
 import path from "path";
-import { Product, getAllProducts } from "./services/productsService";
+import { Product, addNewProduct, getAllProducts, removeProduct } from "./services/productsService";
 import { Category, getAllCategories } from "./services/categoriesService";
 import { Ingredient, getAllIngredients } from "./services/ingredientsService";
+import multer, { FileFilterCallback } from "multer";
+import sharp from "sharp";
 
-const router = express.Router();
+const router: Router = express.Router();
+
+//Opslagconfiguratie voor multer
+const storage = multer.memoryStorage();
+const upload = multer({
+    storage,
+    fileFilter: (req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
+        if(file.mimetype.startsWith("image/")) {
+            cb(null, true);
+        } else {
+            cb(new Error("Enkel afbeeldingen zijn toegestaan!"));
+        }
+    },
+});
 
 // Dashboard route
 router.get("/", async (req: Request, res: Response) => {
@@ -30,6 +45,27 @@ router.get("/products", async (req: Request, res: Response) => {
     });
 });
 
+router.post("/delete-product/:id", async (req: Request, res: Response) => {
+    const productId = Number(req.params.id);
+
+    if (isNaN(productId)) {
+        return res.status(400).send("Invalid product ID");
+    }
+
+    try {
+        await removeProduct(productId);
+        const products = await getAllProducts();
+
+        res.render("products", {
+            title: "Products",
+            products,
+        });
+    } catch (error) {
+        console.error("Fout bij het verwijderen van product:", error);
+        res.status(500).send("Fout bij het verwijderen van het product.");
+    }
+});
+
 router.get("/add-product", async (req: Request, res: Response) => {
     const products: Product[] = await getAllProducts();
     const categories: Category[] = await getAllCategories();
@@ -41,6 +77,45 @@ router.get("/add-product", async (req: Request, res: Response) => {
         categories,
         ingredients
     });
+});
+
+router.post("/add-product", upload.single("image"), async (req: Request, res: Response) => {
+    if(!req.file) {
+        res.status(400).send("Geen afbeelding geüpload.");
+        return;
+    }
+
+    const { category_id, name, price, description } = req.body;
+
+    const filename = `${Date.now()}.webp`;
+    const outputPath = path.join(__dirname, "..", "server", "public", "images", filename);
+
+    try {
+        await sharp(req.file.buffer)
+         .resize(800, 800)
+         .toFormat("webp")
+         .toFile(outputPath);
+
+        // Insert into database
+        await addNewProduct({
+            category_id: Number(category_id),
+            name,
+            price: Number(price),
+            description,
+            image_url: filename,
+        });
+
+        const products: Product[] = await getAllProducts();
+
+        res.render("products", { 
+        title: "Products",
+        products 
+        });
+
+    } catch (error) {
+        console.error("Fout bij het toevoegen van product:", error);
+        res.status(500).send("Fout bij het toevoegen van het product.");
+    }
 });
 
 router.get("/products/edit/:id", async (req: Request, res: Response) => {

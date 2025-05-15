@@ -38,8 +38,10 @@
                                 <div class="table-container__actions">
                                     <a href="/products/edit/1"
                                         class="table-container__button table-container__button--edit">Edit</a>
-                                    <button
-                                        class="table-container__button table-container__button--delete">Delete</button>
+                                    <form action="/delete-product/<%= product.id %>" method="POST"
+                                        onsubmit="return confirm('Weet je zeker dat je dit product wilt verwijderen?');">
+                                        <button type="submit">Verwijderen</button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
