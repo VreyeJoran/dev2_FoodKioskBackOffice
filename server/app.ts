@@ -3,11 +3,14 @@ import path from "path";
 import expressLayouts from "express-ejs-layouts";
 import routes from "./routes";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 
 const app: Application = express();
 const PORT: number = parseInt(<string>process.env.PORT, 10) || 3000;
+
+app.use(cors());
 
 // EJS als template-engine instellen
 app.set("view engine", "ejs");
