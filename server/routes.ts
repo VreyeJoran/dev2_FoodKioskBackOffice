@@ -45,26 +45,26 @@ router.get("/products", async (req: Request, res: Response) => {
     });
 });
 
-router.post("/delete-product/:id", async (req: Request, res: Response) => {
-    const productId = Number(req.params.id);
+// router.post("/delete-product/:id", async (req: Request, res: Response) => {
+//     const productId = Number(req.params.id);
 
-    if (isNaN(productId)) {
-        return res.status(400).send("Invalid product ID");
-    }
+//     if (isNaN(productId)) {
+//         return res.status(400).send("Invalid product ID");
+//     }
 
-    try {
-        await removeProduct(productId);
-        const products = await getAllProducts();
+//     try {
+//         await removeProduct(productId);
+//         const products = await getAllProducts();
 
-        res.render("products", {
-            title: "Products",
-            products,
-        });
-    } catch (error) {
-        console.error("Fout bij het verwijderen van product:", error);
-        res.status(500).send("Fout bij het verwijderen van het product.");
-    }
-});
+//         res.render("products", {
+//             title: "Products",
+//             products,
+//         });
+//     } catch (error) {
+//         console.error("Fout bij het verwijderen van product:", error);
+//         res.status(500).send("Fout bij het verwijderen van het product.");
+//     }
+// });
 
 router.get("/add-product", async (req: Request, res: Response) => {
     const products: Product[] = await getAllProducts();
@@ -182,6 +182,41 @@ router.get("/ingredients/edit/:id", async (req: Request, res: Response) => {
 // Redirect root to dashboard
 router.get("/", (req: Request, res: Response) => {
     res.redirect("/dashboard");
+});
+
+// API routes
+
+// API: Get all products
+router.get("/api/products", async (req: Request, res: Response) => {
+    try {
+        const products: Product[] = await getAllProducts();
+        res.json(products);
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        res.status(500).json({ error: "Failed to fetch products" });
+    }
+});
+
+// API: Get all categories
+router.get("/api/categories", async (req: Request, res: Response) => {
+    try {
+        const categories: Category[] = await getAllCategories();
+        res.json(categories);
+    } catch (error) {
+        console.error("Error fetching categories:", error);
+        res.status(500).json({ error: "Failed to fetch categories" });
+    }
+});
+
+// API: Get all ingredients
+router.get("/api/ingredients", async (req: Request, res: Response) => {
+    try {
+        const ingredients: Ingredient[] = await getAllIngredients();
+        res.json(ingredients);
+    } catch (error) {
+        console.error("Error fetching ingredients:", error);
+        res.status(500).json({ error: "Failed to fetch ingredients" });
+    }
 });
 
 export default router;
