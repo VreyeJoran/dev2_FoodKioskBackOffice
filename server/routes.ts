@@ -1,6 +1,6 @@
 import express, { Request, Response, Router } from "express";
 import path from "path";
-import { Product, addNewProduct, getAllProducts, removeProduct } from "./services/productsService";
+import { Product, addNewProduct, addNewProductVariant, getAllProducts, removeProduct } from "./services/productsService";
 import { Category, getAllCategories } from "./services/categoriesService";
 import { Ingredient, getAllIngredients } from "./services/ingredientsService";
 import multer, { FileFilterCallback } from "multer";
@@ -85,7 +85,7 @@ router.post("/add-product", upload.single("image"), async (req: Request, res: Re
         return;
     }
 
-    const { category_id, name, price, description } = req.body;
+    const { category_id, name, size, price, description } = req.body;
 
     const filename = `${Date.now()}.webp`;
     const outputPath = path.join(__dirname, "..", "server", "public", "images", filename);
@@ -96,13 +96,19 @@ router.post("/add-product", upload.single("image"), async (req: Request, res: Re
          .toFormat("webp")
          .toFile(outputPath);
 
-        // Insert into database
-        await addNewProduct({
+        // 1. Insert new product, no price here (price belongs to variant)
+        const newProduct = await addNewProduct({
             category_id: Number(category_id),
             name,
-            price: Number(price),
             description,
             image_url: filename,
+        });
+
+        // 2. Insert variant with product_id, size and price
+        await addNewProductVariant({
+            product_id: newProduct.id,
+            size: size ?? "Default", // fallback size if not provided
+            price: Number(price),
         });
 
         const products: Product[] = await getAllProducts();
