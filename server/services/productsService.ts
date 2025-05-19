@@ -6,10 +6,12 @@ export interface Product {
   category_id: number;
   category: string;
   name: string;
-  size: string;
-  price: number;
   description?: string;
   image_url?: string;
+  variants: {
+    size: string;
+    price: number;
+  }[];
 }
 
 export interface AddProduct {
@@ -35,11 +37,24 @@ export interface AddProductVariant {
 
 export async function getAllProducts(): Promise<Product[]> {
     try {
-        const data : Product[] = await sql`select products.id, products.category_id, categories.name as category, products.name, product_variants.size, product_variants.price, products.description, products.image_url 
-        from products
-        join categories on categories.id=products.category_id
-        join product_variants on product_variants.product_id=products.id
-        order by products.id`;
+        const data : Product[] = await sql`SELECT
+        products.id,
+        products.category_id,
+        categories.name AS category,
+        products.name,
+        products.description,
+        products.image_url,
+        json_agg(
+            json_build_object(
+            'size', product_variants.size,
+            'price', product_variants.price
+            )
+        ) AS variants
+        FROM products
+        JOIN categories ON categories.id = products.category_id
+        JOIN product_variants ON product_variants.product_id = products.id
+        GROUP BY products.id, categories.name
+        ORDER BY products.id;`;
         return data;
 
     } catch (error) {
