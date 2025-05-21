@@ -1,10 +1,12 @@
 import express, { Request, Response, Router } from "express";
 import path from "path";
-import { Product, addNewProduct, addNewProductVariant, getAllProducts, removeProduct } from "./services/productsService";
-import { Category, getAllCategories } from "./services/categoriesService";
+import { Product, addNewProduct, addNewProductVariant, getAllProducts, getProductById, removeProduct, updateProduct } from "./services/productsService";
+import { Category, getAllCategories, getCategoryById } from "./services/categoriesService";
 import { Ingredient, getAllIngredients } from "./services/ingredientsService";
 import multer, { FileFilterCallback } from "multer";
 import sharp from "sharp";
+import slugify from "slugify";
+import sql from "./services/db";
 
 const router: Router = express.Router();
 
@@ -45,92 +47,184 @@ router.get("/products", async (req: Request, res: Response) => {
     });
 });
 
-// router.post("/delete-product/:id", async (req: Request, res: Response) => {
-//     const productId = Number(req.params.id);
+router.post("/delete-product/:id", async (req: Request, res: Response) => {
+    const productId = Number(req.params.id);
+    const products: Product[] = await getAllProducts();
 
-//     if (isNaN(productId)) {
-//         return res.status(400).send("Invalid product ID");
-//     }
+    try {
+        await removeProduct(productId);
 
-//     try {
-//         await removeProduct(productId);
-//         const products = await getAllProducts();
+        return res.render("products", {
+            title: "Products",
+            products,
+        });
+    } catch (error) {
+        console.error("Fout bij het verwijderen van product:", error);
+        res.render("products", {
+            title: "Products",
+            products,
+        });
+    }
+});
 
-//         res.render("products", {
-//             title: "Products",
-//             products,
-//         });
-//     } catch (error) {
-//         console.error("Fout bij het verwijderen van product:", error);
-//         res.status(500).send("Fout bij het verwijderen van het product.");
-//     }
-// });
-
-router.get("/add-product", async (req: Request, res: Response) => {
+router.get("/edit-product/:id", async (req: Request, res: Response) => {
+    const productId = Number(req.params.id);
     const products: Product[] = await getAllProducts();
     const categories: Category[] = await getAllCategories();
-    const ingredients: Ingredient[] = await getAllIngredients();
+
+    try {
+        const product = await getProductById(productId);
+
+        res.render("edit-product", {
+            title: "Edit Product",
+            product,
+            categories,
+            formData:{},
+        });
+    } catch (error) {
+        console.error("Error fetching product:", error);
+        res.render("products", {
+            title: "Products",
+            products,
+        });
+    }
+});
+
+router.post('/edit-product/:id', upload.single('image'), async (req: Request, res: Response) => {
+    const productId = parseInt(req.params.id);
+    const {
+        name,
+        size1,
+        size2,
+        description,
+        price1,
+        price2,
+        category_id,
+    } = req.body;
+    
+    const categories: Category[] = await getAllCategories();
+    const product = await getProductById(productId);
+    const category = await getCategoryById(category_id);
+
+    try {
+        const existingProduct = await getProductById(productId);
+        if (!existingProduct) {
+            return res.status(404).render('edit-product', {
+                errorMessage: 'Product not found',
+                product,
+                categories,
+                formData: req.body,
+            });
+        }
+
+        const image_url = req.file
+            ? `images/products/${slugify(category.name, { lower: true, strict: true })}/${req.file.filename}`
+            : existingProduct.image_url;
+        const outputPath = image_url ? path.join(__dirname, "..", "server", "public", image_url) : null;
+
+        if (req.file) {
+            await sharp(req.file.buffer)
+                .resize(800, 800)
+                .toFormat("webp")
+                .toFile(outputPath!);
+        }
+
+        // Construct updated variants
+        const variants = [
+            {
+                size: size1,
+                price: parseFloat(price1),
+            },
+        ];
+        if (size2 && price2) {
+            variants.push({
+                size: size2,
+                price: parseFloat(price2),
+            });
+        }
+
+        // Save to DB
+        await updateProduct({
+            id: productId,
+            category_id: parseInt(category_id),
+            category: category.name,
+            name,
+            description,
+            image_url,
+            variants,
+        });
+
+        // Redirect to products page
+        res.redirect('/products');
+    } catch (err) {
+        console.error(err);
+        res.status(500).render('edit-product', {
+            errorMessage: 'An error occurred during update',
+            product: product,
+            categories,
+            formData: req.body,
+        });
+    }
+});
+
+router.get("/add-product", async (req: Request, res: Response) => {
+    const categories: Category[] = await getAllCategories();
 
     res.render("add-product", { 
         title: "Add New Product",
-        products,
         categories,
-        ingredients
     });
 });
 
 router.post("/add-product", upload.single("image"), async (req: Request, res: Response) => {
-    if(!req.file) {
-        res.status(400).send("Geen afbeelding geüpload.");
-        return;
-    }
-
     const { category_id, name, size, price, description } = req.body;
+    const categories: Category[] = await getAllCategories();
 
-    const filename = `${Date.now()}.webp`;
-    const outputPath = path.join(__dirname, "..", "server", "public", "images", filename);
+    // Find the category based on ID
+    const category = categories.find(category => category.id == Number(category_id));
+    const safeCategoryName = category ? slugify(category.name, { lower: true, strict: true }) : "uncategorized";    
+    const safeProductName = slugify(name, { lower: true, strict: true });
+
+    const filename = req.file ? `images/products/${safeCategoryName}/${safeProductName}.webp` : null;
+    const outputPath = filename ? path.join(__dirname, "..", "server", "public", filename) : null;
 
     try {
-        await sharp(req.file.buffer)
-         .resize(800, 800)
-         .toFormat("webp")
-         .toFile(outputPath);
+        if (req.file) {
+            await sharp(req.file.buffer)
+                .resize(800, 800)
+                .toFormat("webp")
+                .toFile(outputPath!);
+        }
 
-        // 1. Insert new product, no price here (price belongs to variant)
         const newProduct = await addNewProduct({
             category_id: Number(category_id),
             name,
             description,
-            image_url: filename,
+            image_url: filename ?? "",
         });
 
-        // 2. Insert variant with product_id, size and price
         await addNewProductVariant({
-            product_id: newProduct.id,
-            size: size ?? "Default", // fallback size if not provided
+            product_id: Number(newProduct.id),
+            size: size ? size : "Default",
             price: Number(price),
         });
 
         const products: Product[] = await getAllProducts();
 
         res.render("products", { 
-        title: "Products",
-        products 
+            title: "Products",
+            products 
         });
 
     } catch (error) {
         console.error("Fout bij het toevoegen van product:", error);
-        res.status(500).send("Fout bij het toevoegen van het product.");
+        res.render("add-product", {
+            title: "Add New Product",
+            errorMessage: "Fout bij het toevoegen van het product. Probeer opnieuw.",
+            categories,
+            formData: req.body ?? {},
+        });
     }
-});
-
-router.get("/products/edit/:id", async (req: Request, res: Response) => {
-    const productId = req.params.id;
-    // TODO: Add product fetching by ID
-    res.render("products/edit", { 
-        title: "Edit Product",
-        productId 
-    });
 });
 
 // Categories routes

@@ -28,23 +28,36 @@
                                 <%= product.name %>
                             </td>
                             <td class="table-container__td">
-                                <%= product.variants.size %>
+                                <% if (product.variants && product.variants.length> 0) { %>
+                                    <%= product.variants[0].size %>
+                                        <% if (product.variants[1]) { %>
+                                            or <%= product.variants[1].size %>
+                                                <% } %>
+                                                    <% } else { %>
+                                                        No variants
+                                                        <% } %>
                             </td>
                             <td class="table-container__td">
                                 <%= product.category %>
                             </td>
-                            <td class="table-container__td">€<%= product.variants.price %>
+                            <td class="table-container__td">
+                                <% if (product.variants && product.variants.length> 0) { %>
+                                    €<%= product.variants[0].price %>
+                                        <% if (product.variants[1]) { %>
+                                            or €<%= product.variants[1].price %>
+                                                <% }} %>
                             </td>
                             <td class="table-container__td">
                                 <%= product.description %>
                             </td>
                             <td class="table-container__td">
                                 <div class="table-container__actions">
-                                    <a href="/products/edit/1"
+                                    <a href="/edit-product/<%= product.id %>"
                                         class="table-container__button table-container__button--edit">Edit</a>
                                     <form action="/delete-product/<%= product.id %>" method="POST"
                                         onsubmit="return confirm('Weet je zeker dat je dit product wilt verwijderen?');">
-                                        <button type="submit">Verwijderen</button>
+                                        <button type="submit"
+                                            class="table-container__button table-container__button--delete">Verwijderen</button>
                                     </form>
                                 </div>
                             </td>

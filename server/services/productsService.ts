@@ -63,6 +63,81 @@ export async function getAllProducts(): Promise<Product[]> {
     }
 }
 
+export async function getProductById(productId: number): Promise<Product | null> {
+    try {
+        const [product] = await sql<Product[]>`
+            SELECT
+                products.id,
+                products.category_id,
+                categories.name AS category,
+                products.name,
+                products.description,
+                products.image_url,
+                json_agg(
+                    json_build_object(
+                        'size', product_variants.size,
+                        'price', product_variants.price
+                    )
+                ) AS variants
+            FROM products
+            JOIN categories ON categories.id = products.category_id
+            JOIN product_variants ON product_variants.product_id = products.id
+            WHERE products.id = ${productId}
+            GROUP BY products.id, categories.name
+        `;
+
+        return product || null;
+    } catch (error) {
+        console.error("Error fetching product by ID:", error);
+        throw new Error("Could not fetch product: " + (error as Error).message);
+    }
+}
+
+export async function updateProduct(product: Product) {
+  try {
+    await sql`
+      UPDATE products
+      SET
+        name = ${product.name},
+        description = ${product.description ?? null},
+        category_id = ${product.category_id},
+        image_url = ${product.image_url ?? null}
+      WHERE id = ${product.id}
+    `;
+
+    await sql`
+      DELETE FROM product_variants
+      WHERE product_id = ${product.id}
+    `;
+
+    // Insert new variants
+    for (const variant of product.variants) {
+      await sql`
+        INSERT INTO product_variants (product_id, size, price)
+        VALUES (
+          ${product.id},
+          ${variant.size},
+          ${variant.price}
+        )
+      `;
+    }
+
+  } catch (error) {
+    console.error("Error updating product:", error);
+    throw new Error("Could not update product: " + (error as Error).message);
+  }
+}
+
+export async function removeProduct(productId: number) {
+    try {
+        await sql`DELETE FROM product_variants WHERE product_id = ${productId}`;
+        await sql`DELETE FROM products WHERE id = ${productId}`;
+    } catch (error) {
+        console.error("Error removing product:", error);
+        throw new Error("Could not remove product: " + (error as Error).message);
+    }
+}
+
 export async function addNewProduct(product: AddProduct): Promise<ProductInserted> {
     try {
         const [newProduct] = await sql<ProductInserted[]>`
@@ -82,9 +157,9 @@ export async function addNewProduct(product: AddProduct): Promise<ProductInserte
     }
 }
 
-export async function addNewProductVariant(product: AddProductVariant): Promise<AddProductVariant> {
+export async function addNewProductVariant(product: AddProductVariant) {
     try {
-        const [newProduct] = await sql<AddProductVariant[]>`
+        await sql`
             INSERT INTO product_variants (product_id, size, price)
             VALUES (
                 ${product.product_id},
@@ -93,21 +168,8 @@ export async function addNewProductVariant(product: AddProductVariant): Promise<
             )
             RETURNING id, product_id, size, price
         `;
-        return newProduct;
     } catch (error) {
         console.error("Error adding new product:", error);
         throw new Error("Could not add new product: " + (error as Error).message);
-    }
-}
-
-export async function removeProduct(productId: number): Promise<void> {
-    try {
-        await sql`
-            DELETE FROM products
-            WHERE id = ${productId}
-        `;
-    } catch (error) {
-        console.error("Error removing product:", error);
-        throw new Error("Could not remove product: " + (error as Error).message);
     }
 }

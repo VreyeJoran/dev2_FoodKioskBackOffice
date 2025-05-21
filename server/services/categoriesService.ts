@@ -23,3 +23,20 @@ export async function getAllCategories(): Promise<Category[]> {
         throw new Error('Could not fetch category: ' + error);
     }
 }
+
+export async function getCategoryById(categoryId: number): Promise<Category> {
+    try {
+        const [category] = await sql<Category[]>`
+            SELECT categories.id, categories.name, COUNT(products.id) AS number_of_products, categories.description, categories.image_url
+            FROM categories
+            JOIN products ON products.category_id = categories.id
+            WHERE categories.id = ${categoryId}
+            GROUP BY categories.id, categories.name, categories.description, categories.image_url;
+        `;
+
+        return category || null;
+    } catch (error) {
+        console.error("Error fetching category by ID:", error);
+        throw new Error("Could not fetch category: " + (error as Error).message);
+    }
+}

@@ -1,9 +1,17 @@
 /* Add Pages Styles */
+.alert {
+  position: absolute;
+  right: 40%;
+  top: 2.5rem;
+  color: #4d0629;
+}
+
 .content {
   padding: 2rem;
   background-color: #faf0d8;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .content__header {
@@ -95,6 +103,10 @@
 .ingredient-item label {
   cursor: pointer;
   user-select: none;
+}
+
+.form__image-preview {
+  width: 7.5rem;
 }
 
 /* Form Actions */
