@@ -46,7 +46,20 @@ router.post("/orders", async (req: Request, res: Response) => {
   if (
     !order ||
     !Array.isArray(order.items) ||
-    typeof order.total_price !== "number"
+    typeof order.total_price !== "number" ||
+    typeof order.created_at !== "string" ||
+    typeof order.is_takeaway !== "boolean" ||
+    !order.items.every(
+      (item) =>
+        typeof item.product_variant_id === "number" &&
+        typeof item.quantity === "number" &&
+        Array.isArray(item.ingredients) &&
+        item.ingredients.every(
+          (ing) =>
+            typeof ing.ingredient_id === "number" &&
+            typeof ing.quantity === "number"
+        )
+    )
   ) {
     res.status(400).json({ error: "Invalid order format" });
   }
