@@ -1,0 +1,48 @@
+<div class="content">
+    <div class="content__header">
+        <h3 class="content__title">Edit Category: <%= category.name %>
+        </h3>
+    </div>
+
+    <% if (typeof errorMessage !=='undefined' ) { %>
+        <div class="alert">
+            <%= errorMessage %>
+        </div>
+        <% } %>
+
+            <div class="content__body">
+                <form action="/edit-category/<%= category.id %>" method="POST" class="form">
+                    <div class="form__group">
+                        <label for="name" class="form__label">Edit Category Name</label>
+                        <input type="text" id="name" name="name" class="form__input"
+                            value="<%= (formData && formData.name) || category.name %>" required>
+                    </div>
+
+                    <div class="form__group">
+                        <label for="description" class="form__label">Edit Description</label>
+                        <textarea id="description" name="description" class="form__input"
+                            rows="4"><%= formData && formData.description || category.description %></textarea>
+                    </div>
+
+                    <div class="form__group">
+                        <label for="image" class="form__label">Swap Category
+                            Image</label>
+                        <input type="text" id="image_url" name="image_url" class="form__input"
+                            value="<%= (formData && formData.image_url) || category.image_url %>">
+                    </div>
+
+                    <% if (formData || category.image_url) { %>
+                        <label class="form__label">Current image: <%= formData && formData.image_url ||
+                                category.image_url %></label>
+                        <img src="/<%= formData.image_url || category.image_url %>" alt="Current image"
+                            class="form__image-preview">
+                        <% } %>
+
+                            <div class="form__actions">
+                                <button type="submit" class="btn btn--primary">Submit
+                                    Edit</button>
+                                <a href="/categories" class="btn btn--secondary">Cancel</a>
+                            </div>
+                </form>
+            </div>
+</div>

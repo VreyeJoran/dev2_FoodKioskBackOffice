@@ -3,22 +3,31 @@
         <h3 class="content__title">Add New Category</h3>
     </div>
 
-    <div class="content__body">
-        <form action="/categories/add" method="POST" class="form">
-            <div class="form__group">
-                <label for="name" class="form__label">Category Name</label>
-                <input type="text" id="name" name="name" class="form__input" required>
-            </div>
+    <% if (typeof errorMessage !=='undefined' ) { %>
+        <div class="alert">
+            <%= errorMessage %>
+        </div>
+        <% } %>
 
-            <div class="form__group">
-                <label for="description" class="form__label">Description</label>
-                <textarea id="description" name="description" class="form__input" rows="4"></textarea>
-            </div>
+            <div class="content__body">
+                <form action="/add-category" method="POST" class="form">
+                    <div class="form__group">
+                        <label for="name" class="form__label">Category Name</label>
+                        <input type="text" id="name" name="name" class="form__input" <% if (typeof formData
+                            !=="undefined" ) { %>value="<%= formData.name || '' %>"<%}%>
+                                required>
+                    </div>
 
-            <div class="form__actions">
-                <button type="submit" class="btn btn--primary">Add Category</button>
-                <a href="/categories" class="btn btn--secondary">Cancel</a>
+                    <div class="form__group">
+                        <label for="description" class="form__label">Description</label>
+                        <textarea id="description" name="description" class="form__input" rows="4"><% if (typeof formData
+                            !=="undefined" ) { %><%= formData?.description || '' %><%}%></textarea>
+                    </div>
+
+                    <div class="form__actions">
+                        <button type="submit" class="btn btn--primary">Add Category</button>
+                        <a href="/categories" class="btn btn--secondary">Cancel</a>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-</div> 
+</div>

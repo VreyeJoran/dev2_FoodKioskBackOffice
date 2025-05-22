@@ -25,15 +25,15 @@
                     </div>
 
                     <div class="form__group">
-                        <label for="description" class="form__label">Description</label>
-                        <textarea id="description" name="description" class="form__input" rows="4"><% if (typeof formData
-                            !=="undefined" ) { %><%= formData?.description || '' %><%}%></textarea>
-                    </div>
-
-                    <div class="form__group">
                         <label for="price" class="form__label">Price</label>
                         <input type="number" id="price" name="price" class="form__input" step="0.01" min="0" <% if
                             (typeof formData !=="undefined" ) { %>value="<%= formData.price || '' %>"<%}%> required>
+                    </div>
+
+                    <div class="form__group">
+                        <label for="description" class="form__label">Description</label>
+                        <textarea id="description" name="description" class="form__input" rows="4"><% if (typeof formData
+                            !=="undefined" ) { %><%= formData?.description || '' %><%}%></textarea>
                     </div>
 
                     <div class="form__group">

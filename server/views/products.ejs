@@ -4,66 +4,69 @@
         <a href="/add-product" class="table-container__button">Add Product</a>
     </div>
 
-    <div class="table-container__content">
-        <table class="table-container__table">
-            <thead class="table-container__thead">
-                <tr class="table-container__tr">
-                    <th class="table-container__th">ID</th>
-                    <th class="table-container__th">Product Name</th>
-                    <th class="table-container__th">Product Size</th>
-                    <th class="table-container__th">Category</th>
-                    <th class="table-container__th">Price</th>
-                    <th class="table-container__th">Description</th>
-                    <th class="table-container__th">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="table-container__tbody">
-                <% if(products.length !==0) { %>
-                    <% products.forEach(product=> { %>
+    <% if (typeof errorMessage !=='undefined' ) { %>
+        <div class="alert">
+            <%= errorMessage %>
+        </div>
+        <% } %>
+
+            <div class="table-container__content">
+                <table class="table-container__table">
+                    <thead class="table-container__thead">
                         <tr class="table-container__tr">
-                            <td class="table-container__td">
-                                <%= product.id %>
-                            </td>
-                            <td class="table-container__td">
-                                <%= product.name %>
-                            </td>
-                            <td class="table-container__td">
-                                <% if (product.variants && product.variants.length> 0) { %>
-                                    <%= product.variants[0].size %>
-                                        <% if (product.variants[1]) { %>
-                                            or <%= product.variants[1].size %>
-                                                <% } %>
-                                                    <% } else { %>
-                                                        No variants
-                                                        <% } %>
-                            </td>
-                            <td class="table-container__td">
-                                <%= product.category %>
-                            </td>
-                            <td class="table-container__td">
-                                <% if (product.variants && product.variants.length> 0) { %>
-                                    €<%= product.variants[0].price %>
-                                        <% if (product.variants[1]) { %>
-                                            or €<%= product.variants[1].price %>
-                                                <% }} %>
-                            </td>
-                            <td class="table-container__td">
-                                <%= product.description %>
-                            </td>
-                            <td class="table-container__td">
-                                <div class="table-container__actions">
-                                    <a href="/edit-product/<%= product.id %>"
-                                        class="table-container__button table-container__button--edit">Edit</a>
-                                    <form action="/delete-product/<%= product.id %>" method="POST"
-                                        onsubmit="return confirm('Weet je zeker dat je dit product wilt verwijderen?');">
-                                        <button type="submit"
-                                            class="table-container__button table-container__button--delete">Verwijderen</button>
-                                    </form>
-                                </div>
-                            </td>
+                            <th class="table-container__th">ID</th>
+                            <th class="table-container__th">Product Name</th>
+                            <th class="table-container__th">Product Size</th>
+                            <th class="table-container__th">Category</th>
+                            <th class="table-container__th">Price</th>
+                            <th class="table-container__th">Description</th>
+                            <th class="table-container__th">Actions</th>
                         </tr>
-                        <% })} %>
-            </tbody>
-        </table>
-    </div>
+                    </thead>
+                    <tbody class="table-container__tbody">
+                        <% if(products.length !==0) { %>
+                            <% products.forEach(product=> { %>
+                                <tr class="table-container__tr">
+                                    <td class="table-container__td">
+                                        <%= product.id %>
+                                    </td>
+                                    <td class="table-container__td">
+                                        <%= product.name %>
+                                    </td>
+                                    <td class="table-container__td">
+                                        <% if (product.variants.length> 0) { %>
+                                            <%= product.variants[0].size %>
+                                                <% if (product.variants[1]) { %>
+                                                    or <%= product.variants[1].size %>
+                                                        <% }} %>
+                                    </td>
+                                    <td class="table-container__td">
+                                        <% if (product.variants.length> 0) { %>
+                                            €<%= product.variants[0].price %>
+                                                <% if (product.variants[1]) { %>
+                                                    or €<%= product.variants[1].price %>
+                                                        <% }} %>
+                                    </td>
+                                    <td class="table-container__td">
+                                        <%= product.category %>
+                                    </td>
+                                    <td class="table-container__td">
+                                        <%= product.description %>
+                                    </td>
+                                    <td class="table-container__td">
+                                        <div class="table-container__actions">
+                                            <a href="/edit-product/<%= product.id %>"
+                                                class="table-container__button table-container__button--edit">Edit</a>
+                                            <form action="/delete-product/<%= product.id %>" method="POST"
+                                                onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                                <button type="submit"
+                                                    class="table-container__button table-container__button--delete">Delete</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% })} %>
+                    </tbody>
+                </table>
+            </div>
 </div>
