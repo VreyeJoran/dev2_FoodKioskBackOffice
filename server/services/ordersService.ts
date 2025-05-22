@@ -25,7 +25,7 @@ export interface Order {
 export async function addNewOrder(order: Order) {
   try {
     const [newOrder] = await sql`
-      INSERT INTO orders (order_time, total_price, is_takeaway)
+      INSERT INTO orders (created_at, total_price, is_takeaway)
       VALUES (${order.created_at}, ${order.total_price}, ${order.is_takeaway})
       RETURNING id
     `;
