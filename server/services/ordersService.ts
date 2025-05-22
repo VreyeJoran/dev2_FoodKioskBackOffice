@@ -29,7 +29,7 @@ export async function addNewOrder(order: Order) {
       VALUES (${order.created_at}, ${order.total_price}, ${order.is_takeaway})
       RETURNING id
     `;
-    const orderId = newOrder[0].id;
+    const orderId = newOrder.id;
 
     for (const item of order.items) {
       const [newOrderItem] = await sql`
@@ -37,7 +37,7 @@ export async function addNewOrder(order: Order) {
         VALUES (${orderId}, ${item.quantity}, ${item.product_variant_id})
         RETURNING id
       `;
-      const orderItemId = newOrderItem[0].id;
+      const orderItemId = newOrderItem.id;
 
       for (const ingredient of item.ingredients) {
         await sql`
@@ -47,7 +47,7 @@ export async function addNewOrder(order: Order) {
       }
     }
   } catch (error) {
-    console.error("Error adding new order:", error);
-    throw new Error("Could not add order: " + (error as Error).message);
+    console.error(" Error adding new order to DB:", error);
+    throw error; // Let the route handler deal with returning the error to the client
   }
 }

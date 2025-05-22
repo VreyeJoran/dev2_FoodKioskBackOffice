@@ -69,7 +69,9 @@ router.post("/orders", async (req: Request, res: Response) => {
     res.status(201).json({ message: "Order created successfully" });
   } catch (error) {
     console.error("Failed to add order:", error);
-    res.status(500).json({ error: "Failed to add order" });
+    res.status(500).json({
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+    });
   }
 });
 
