@@ -176,8 +176,8 @@ router.post(
     const category = await getCategoryById(category_id);
 
     try {
-      const existingProduct = await getProductById(productId);
-      if (!existingProduct) {
+      const product = await getProductById(productId);
+      if (!product) {
         return res.status(404).render("edit-product", {
           errorMessage: "Product not found",
           product,
