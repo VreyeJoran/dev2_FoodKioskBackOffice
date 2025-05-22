@@ -51,3 +51,25 @@ export async function addNewOrder(order: Order) {
     throw error; // Let the route handler deal with returning the error to the client
   }
 }
+
+// Expects json like this:
+// {
+//   "created_at": "2025-05-22T14:30:00+00:00",
+//   "total_price": 29,
+//   "is_takeaway": true,
+//   "items": [
+//     {
+//       "product_variant_id": 4,
+//       "quantity": 1,
+//       "ingredients": [
+//         { "ingredient_id": 1, "quantity": 1 },
+//         { "ingredient_id": 5, "quantity": 1 }
+//       ]
+//     },
+//     {
+//       "product_variant_id": 7,
+//       "quantity": 2,
+//       "ingredients": []
+//     }
+//   ]
+// }
