@@ -29,7 +29,7 @@ export async function addNewOrder(order: Order) {
       VALUES (${order.created_at}, ${order.total_price}, ${order.is_takeaway})
       RETURNING id
     `;
-    const orderId = newOrder.id;
+    const orderId = newOrder[0].id;
 
     for (const item of order.items) {
       const [newOrderItem] = await sql`
@@ -37,7 +37,7 @@ export async function addNewOrder(order: Order) {
         VALUES (${orderId}, ${item.quantity}, ${item.product_variant_id})
         RETURNING id
       `;
-      const orderItemId = newOrderItem.id;
+      const orderItemId = newOrderItem[0].id;
 
       for (const ingredient of item.ingredients) {
         await sql`
