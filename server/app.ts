@@ -24,6 +24,8 @@ app.set("layout", "layouts/main");
 // Middleware for static files
 app.use(express.static(path.join(__dirname, "/public")));
 
+app.use(express.json());
+
 // Middleware for forms
 app.use(express.urlencoded({ extended: true }));
 
