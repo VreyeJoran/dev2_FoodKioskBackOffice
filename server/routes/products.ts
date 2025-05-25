@@ -88,6 +88,7 @@ router.post(
         id: 0, //dummy
         variants: [
           {
+            variant_id: 0, //dummy
             size: size ? size : "Default",
             price: Number(price),
           },
@@ -178,12 +179,14 @@ router.post(
       // Construct updated variants
       const variants = [
         {
+          variant_id: 1, //dummy
           size: size1,
           price: parseFloat(price1),
         },
       ];
       if (size2 && price2) {
         variants.push({
+          variant_id: 1, //dummy
           size: size2,
           price: parseFloat(price2),
         });

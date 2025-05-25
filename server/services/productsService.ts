@@ -9,6 +9,7 @@ export interface Product {
   description?: string;
   image_url?: string;
   variants: {
+    variant_id: number;
     size: string;
     price: number;
   }[];
@@ -33,6 +34,7 @@ export async function getAllProducts(): Promise<Product[]> {
         products.image_url,
         json_agg(
             json_build_object(
+            'variant_id', product_variants.id
             'size', product_variants.size,
             'price', product_variants.price
             ) ORDER BY product_variants.id
@@ -61,6 +63,7 @@ export async function getProductById(productId: number): Promise<Product> {
         products.image_url,
         json_agg(
             json_build_object(
+                'variant_id', product_variants.id
                 'size', product_variants.size,
                 'price', product_variants.price
                 )
