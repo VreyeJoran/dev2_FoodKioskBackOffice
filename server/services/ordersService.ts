@@ -12,6 +12,7 @@ export interface OrderItem {
   product_variant_id: number;
   quantity: number;
   ingredients: OrderItemIngredient[];
+  price: number;
 }
 
 export interface Order {
@@ -33,8 +34,8 @@ export async function addNewOrder(order: Order) {
 
     for (const item of order.items) {
       const [newOrderItem] = await sql`
-        INSERT INTO order_items (order_id, quantity, product_variant_id)
-        VALUES (${orderId}, ${item.quantity}, ${item.product_variant_id})
+        INSERT INTO order_items (order_id, quantity, product_variant_id, price)
+        VALUES (${orderId}, ${item.quantity}, ${item.product_variant_id}, ${item.price})
         RETURNING id
       `;
       const orderItemId = newOrderItem.id;

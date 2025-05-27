@@ -53,6 +53,7 @@ router.post("/orders", async (req: Request, res: Response) => {
       (item) =>
         typeof item.product_variant_id === "number" &&
         typeof item.quantity === "number" &&
+        typeof item.price === "number" &&
         Array.isArray(item.ingredients) &&
         item.ingredients.every(
           (ing) =>
