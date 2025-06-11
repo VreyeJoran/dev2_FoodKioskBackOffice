@@ -4,12 +4,14 @@ import sql from "./db";
 export interface OrderItemIngredient {
   id: number;
   ingredient_id: number;
+  ingredient_name?: string;
   quantity: number;
 }
 
 export interface OrderItem {
   id: number;
   product_variant_id: number;
+  product_variant_name?: string;
   quantity: number;
   ingredients: OrderItemIngredient[];
   price: number;
@@ -25,8 +27,47 @@ export interface Order {
 
 export async function getAllOrders(): Promise<Order[]> {
   try {
-    const data: Order[] =
-      await sql`SELECT orders.id, orders.created_at, orders.total_price, orders.is_takeaway, json_agg(json_build_object('id', order_items.id, 'product_variant_id', order_items.product_variant_id, 'quantity', order_items.quantity, 'ingredients', json_agg(json_build_object('id', order_item_ingredients.id, 'ingredient_id', order_item_ingredients.ingredient_id, 'quantity', order_item_ingredients.quantity)))) AS items FROM orders JOIN order_items ON orders.id = order_items.order_id JOIN order_item_ingredients ON order_items.id = order_item_ingredients.order_item_id GROUP BY orders.id ORDER BY orders.id  `;
+    const data: Order[] = await sql`
+    SELECT 
+      orders.id, 
+      orders.created_at, 
+      orders.total_price, 
+      orders.is_takeaway,
+
+      json_agg(
+        json_build_object(
+          'order_item_id', order_items.id,
+          'product_variant_id', order_items.product_variant_id,
+          'product_variant_name', products.name || ' (' || product_variants.size || ')',
+          'quantity', order_items.quantity,
+          'price', order_items.price,
+          'ingredients', ingredients.ingredients
+        ) ORDER BY order_items.id
+      ) AS items
+
+    FROM orders
+
+    JOIN order_items ON orders.id = order_items.order_id
+    JOIN product_variants ON order_items.product_variant_id = product_variants.id
+    JOIN products ON product_variants.product_id = products.id
+
+    -- LEFT JOIN LATERAL to get nested ingredient data with names
+    LEFT JOIN LATERAL (
+      SELECT json_agg(
+              json_build_object(
+                'order_item_ingredient_id', order_item_ingredients.id,
+                'ingredient_id', order_item_ingredients.ingredient_id,
+                'ingredient_name', ingredients.name,
+                'quantity', order_item_ingredients.quantity
+              ) ORDER BY order_item_ingredients.id
+            ) AS ingredients
+      FROM order_item_ingredients
+      JOIN ingredients ON order_item_ingredients.ingredient_id = ingredients.id
+      WHERE order_item_ingredients.order_item_id = order_items.id
+    ) ingredients ON true
+
+    GROUP BY orders.id
+    ORDER BY orders.id`;
     return data;
   } catch (error) {
     console.error("Error fetching orders:", error);
@@ -73,6 +114,7 @@ export async function addNewOrder(order: Order) {
 //     {
 //       "product_variant_id": 4,
 //       "quantity": 1,
+//       "price": 14.5,
 //       "ingredients": [
 //         { "ingredient_id": 1, "quantity": 1 },
 //         { "ingredient_id": 5, "quantity": 1 }
@@ -81,6 +123,7 @@ export async function addNewOrder(order: Order) {
 //     {
 //       "product_variant_id": 7,
 //       "quantity": 2,
+//       "price": 7.25,
 //       "ingredients": []
 //     }
 //   ]
