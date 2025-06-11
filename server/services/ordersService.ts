@@ -23,6 +23,17 @@ export interface Order {
   items: OrderItem[];
 }
 
+export async function getAllOrders(): Promise<Order[]> {
+  try {
+    const data: Order[] =
+      await sql`SELECT orders.id, orders.created_at, orders.total_price, orders.is_takeaway, json_agg(json_build_object('id', order_items.id, 'product_variant_id', order_items.product_variant_id, 'quantity', order_items.quantity, 'ingredients', json_agg(json_build_object('id', order_item_ingredients.id, 'ingredient_id', order_item_ingredients.ingredient_id, 'quantity', order_item_ingredients.quantity)))) AS items FROM orders JOIN order_items ON orders.id = order_items.order_id JOIN order_item_ingredients ON order_items.id = order_item_ingredients.order_item_id GROUP BY orders.id ORDER BY orders.id  `;
+    return data;
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    throw new Error("Could not fetch orders: " + error);
+  }
+}
+
 export async function addNewOrder(order: Order) {
   try {
     const [newOrder] = await sql`
