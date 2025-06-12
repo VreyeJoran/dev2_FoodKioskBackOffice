@@ -76,7 +76,7 @@ router.post(
         await sharp(req.file.buffer)
           .resize(250)
           .toFormat("webp")
-          .toFile(outputPath!);
+          .toFile(outputPath);
       }
 
       await addNewProduct({

@@ -14,10 +14,8 @@ router.use(ordersRoutes);
 
 // Dashboard route
 router.get("/dashboard", async (req: Request, res: Response) => {
-  console.log("Root route handler called");
   try {
     const orders: Order[] = await getAllOrders();
-    console.log("Orders fetched successfully");
     res.render("index", {
       title: "Dashboard",
       orders,

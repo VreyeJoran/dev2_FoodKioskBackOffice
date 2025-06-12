@@ -119,12 +119,14 @@
   color: black;
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
+  text-align: center;
 }
 
 .dashboard__stat-value {
   font-size: 2rem;
   font-weight: 600;
   color: #4d0629;
+  text-align: center;
 }
 
 /* Table Container */

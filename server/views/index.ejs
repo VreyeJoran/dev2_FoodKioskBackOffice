@@ -8,11 +8,30 @@
 
     <div class="dashboard__stat-box">
         <h3 class="dashboard__stat-title">Total Revenue</h3>
-        <p class="dashboard__stat-value">€12,345</p>
+        <p class="dashboard__stat-value">€<%= orders.reduce((total, order)=> total + (order.total_price || 0),
+                0).toFixed(2)
+                %></p>
     </div>
 
     <div class="dashboard__stat-box">
         <h3 class="dashboard__stat-title">Most Popular Product</h3>
-        <p class="dashboard__stat-value">Chicken Burger</p>
+        <p class="dashboard__stat-value">
+            <% const productCounts={}; orders.forEach(order=> {
+                order.items.forEach(item => {
+                productCounts[item.product_variant_name] = (productCounts[item.product_variant_name] || 0) +
+                item.quantity;
+                });
+                });
+
+                let mostPopular = { name: 'None', count: 0 };
+                Object.entries(productCounts).forEach(([name, count]) => {
+                if (count > mostPopular.count) {
+                mostPopular = { name, count };
+                }
+                });
+                %>
+                <%= mostPopular.name %> <br>
+                    <%= mostPopular.count %> sold
+        </p>
     </div>
 </div>
