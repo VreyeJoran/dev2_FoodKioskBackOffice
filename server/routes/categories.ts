@@ -130,8 +130,8 @@ router.post("/delete-category/:id", async (req: Request, res: Response) => {
     res.redirect("/categories");
   } catch (error) {
     console.error("Something went wrong trying to delete the category:", error);
-    res.render("products", {
-      title: "Products",
+    res.render("categories", {
+      title: "Categories",
       errorMessage:
         "Something went wrong trying to delete the category. Try again.",
       categories,

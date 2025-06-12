@@ -68,7 +68,7 @@ router.post(
         })}/${slugify(name, { lower: true, strict: true })}.webp`
       : null;
     const outputPath = image_url
-      ? path.join(__dirname, "..", "server", "public", image_url)
+      ? path.join(__dirname, "..", "public", image_url)
       : null;
 
     try {
@@ -166,7 +166,7 @@ router.post(
           })}/${slugify(name, { lower: true, strict: true })}.webp`
         : null;
       const outputPath = image_url
-        ? path.join(__dirname, "..", "server", "public", image_url)
+        ? path.join(__dirname, "..", "public", image_url)
         : null;
 
       if (req.file) {
