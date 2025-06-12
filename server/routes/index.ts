@@ -13,7 +13,7 @@ router.use(productsRoutes);
 router.use(ordersRoutes);
 
 // Dashboard route
-router.get("/", async (req: Request, res: Response) => {
+router.get("/dashboard", async (req: Request, res: Response) => {
   console.log("Root route handler called");
   try {
     const orders: Order[] = await getAllOrders();
@@ -26,6 +26,10 @@ router.get("/", async (req: Request, res: Response) => {
     console.error("Error in root route handler:", error);
     res.status(500).send("Internal Server Error");
   }
+});
+
+router.get("/", (req: Request, res: Response) => {
+  res.redirect("/dashboard");
 });
 
 export default router;
