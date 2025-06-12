@@ -33,6 +33,12 @@
                                 <%= order.is_takeaway ? 'Takeaway' : 'Dine-in' %>
                             </span>
                         </div>
+                        <div class="order-details__item">
+                            <span class="order-details__label">Total Items:</span>
+                            <span class="order-details__value">
+                                <%= order.items.reduce((total, item)=> total + item.quantity, 0) %> items
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -48,7 +54,8 @@
                                     <span class="order-details__item-quantity">x<%= item.quantity %></span>
                                 </div>
                                 <div class="order-details__item-details">
-                                    <div class="order-details__item-price">€<%= item.price.toFixed(2) %>
+                                    <div class="order-details__item-price">€<%= (item.price * item.quantity).toFixed(2)
+                                            %>
                                     </div>
                                     <% if (item.ingredients && item.ingredients.length> 0) { %>
                                         <div class="order-details__ingredients">

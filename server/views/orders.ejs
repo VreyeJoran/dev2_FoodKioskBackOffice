@@ -43,7 +43,7 @@
                                                 <% } %>
                                     </td>
                                     <td class="table-container__td">
-                                        <%= order.items.length %>
+                                        <%= order.items.reduce((total, item)=> total + item.quantity, 0) %> items
                                     </td>
                                     <td class="table-container__td">
                                         <div class="table-container__actions">

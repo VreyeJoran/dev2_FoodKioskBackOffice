@@ -3,6 +3,7 @@ import categoriesRoutes from "./categories";
 import ingredientsRoutes from "./ingredients";
 import productsRoutes from "./products";
 import ordersRoutes from "./orders";
+import { getAllOrders, Order } from "../services/ordersService";
 
 const router = Router();
 
@@ -12,23 +13,19 @@ router.use(productsRoutes);
 router.use(ordersRoutes);
 
 // Dashboard route
-router.get("/dashboard", async (req: Request, res: Response) => {
-  // TODO: Add actual data fetching for dashboard stats
-  const dashboardData = {
-    totalOrders: 1234,
-    totalRevenue: 12345,
-    mostPopularProduct: "Chicken Burger",
-  };
-
-  res.render("index", {
-    title: "Dashboard",
-    dashboardData,
-  });
-});
-
-// Redirect root to dashboard
-router.get("/", (req: Request, res: Response) => {
-  res.redirect("/dashboard");
+router.get("/", async (req: Request, res: Response) => {
+  console.log("Root route handler called");
+  try {
+    const orders: Order[] = await getAllOrders();
+    console.log("Orders fetched successfully");
+    res.render("index", {
+      title: "Dashboard",
+      orders,
+    });
+  } catch (error) {
+    console.error("Error in root route handler:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 export default router;
