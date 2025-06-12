@@ -1,0 +1,144 @@
+.order-details {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.order-details__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.order-details__title {
+    font-size: 1.8rem;
+    margin: 0;
+    color: #4d0629;
+}
+
+.order-details__button {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.order-details__button:hover {
+    opacity: 0.9;
+}
+
+.order-details__button--back {
+    background-color: #4d0629;
+    color: #faf0d8;
+}
+
+.order-details__section {
+    background-color: #faf0d8;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.order-details__section-title {
+    font-size: 1.4rem;
+    margin: 0 0 1.5rem 0;
+    color: #4d0629;
+}
+
+.order-details__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.order-details__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.order-details__label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.order-details__value {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.order-details__items {
+    display: grid;
+    gap: 1rem;
+}
+
+.order-details__item-card {
+    background-color: #FEE799;
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+.order-details__item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.order-details__item-title {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #4d0629;
+}
+
+.order-details__item-quantity {
+    font-weight: 500;
+    color: #666;
+}
+
+.order-details__item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.order-details__item-price {
+    font-weight: 500;
+}
+
+.order-details__ingredients {
+    margin-top: 0.5rem;
+}
+
+.order-details__ingredients-title {
+    font-size: 0.9rem;
+    color: #4d0629;
+    margin: 0 0 0.5rem 0;
+}
+
+.order-details__ingredients-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.order-details__ingredient {
+    background-color: #4d0629;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: #faf0d8;
+}
+
+.alert {
+    position: absolute;
+    right: 40%;
+    top: 2.5rem;
+    color: #4d0629;
+}

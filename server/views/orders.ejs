@@ -1,0 +1,65 @@
+<div class="table-container">
+    <div class="table-container__header">
+        <h2 class="table-container__title">Orders</h2>
+    </div>
+
+    <% if (typeof errorMessage !=='undefined' ) { %>
+        <div class="alert">
+            <%= errorMessage %>
+        </div>
+        <% } %>
+
+            <div class="table-container__content">
+                <table class="table-container__table">
+                    <thead class="table-container__thead">
+                        <tr class="table-container__tr">
+                            <th class="table-container__th">ID</th>
+                            <th class="table-container__th">Order Date</th>
+                            <th class="table-container__th">Total Price</th>
+                            <th class="table-container__th">Is Takeaway</th>
+                            <th class="table-container__th">Amount of Items</th>
+                            <th class="table-container__th">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-container__tbody">
+                        <% if(orders.length !==0) { %>
+                            <% orders.forEach(order=> { %>
+                                <tr class="table-container__tr">
+                                    <td class="table-container__td">
+                                        <%= order.id %>
+                                    </td>
+                                    <td class="table-container__td">
+                                        <%= new Date(order.created_at).toLocaleDateString('nl-NL', { year: 'numeric' ,
+                                            month: 'long' , day: 'numeric' }) %>
+                                    </td>
+                                    <td class="table-container__td">
+                                        € <%= order.total_price.toFixed(2) %>
+                                    </td>
+                                    <td class="table-container__td">
+                                        <% if (order.is_takeaway) { %>
+                                            Yes
+                                            <% } else { %>
+                                                No
+                                                <% } %>
+                                    </td>
+                                    <td class="table-container__td">
+                                        <%= order.items.length %>
+                                    </td>
+                                    <td class="table-container__td">
+                                        <div class="table-container__actions">
+                                            <a href="/view-order/<%= order.id %>"
+                                                class="table-container__button table-container__button--edit">View
+                                                Order</a>
+                                            <form action="/delete-order/<%= order.id %>" method="POST"
+                                                onsubmit="return confirm('Are you sure you want to delete this order?');">
+                                                <button type="submit"
+                                                    class="table-container__button table-container__button--delete">Delete</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% })} %>
+                    </tbody>
+                </table>
+            </div>
+</div>

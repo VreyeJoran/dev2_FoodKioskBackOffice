@@ -1,5 +1,6 @@
 /* Import add pages styles */
 @import "add-pages.css";
+@import "order-details.css";
 
 /* Layout */
 .layout {

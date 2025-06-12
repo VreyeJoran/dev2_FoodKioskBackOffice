@@ -2,12 +2,14 @@ import express, { Request, Response, Router } from "express";
 import categoriesRoutes from "./categories";
 import ingredientsRoutes from "./ingredients";
 import productsRoutes from "./products";
+import ordersRoutes from "./orders";
 
 const router = Router();
 
 router.use(categoriesRoutes);
 router.use(ingredientsRoutes);
 router.use(productsRoutes);
+router.use(ordersRoutes);
 
 // Dashboard route
 router.get("/dashboard", async (req: Request, res: Response) => {
